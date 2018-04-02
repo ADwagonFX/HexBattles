@@ -32,7 +32,6 @@ namespace HexBattles
             {
                 Image im = Image.FromFile(image);
                 this.Image = new Bitmap(im, 60, 60);
-                this.BringToFront();
             }
         }
 

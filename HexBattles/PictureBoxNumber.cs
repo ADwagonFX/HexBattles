@@ -13,7 +13,7 @@ namespace HexBattles
         // creates he picture
         public PictureBoxNumber(int i, int j, HexBoard board)
         {
-            this.BringImage( board.GetHexBoard()[i,j].Player_Count);
+            this.BringImage(board.GetHexBoard()[i, j].Player_Count);
             this.Size = new System.Drawing.Size(20, 20);
         }
 

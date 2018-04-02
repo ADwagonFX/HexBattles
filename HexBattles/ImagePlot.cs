@@ -13,11 +13,11 @@ namespace HexBattles
         public PictureBoxNumber NumPic { get; set; } // Holds the number of soldiers
 
         // Builds the imageplot with the images of the hex and the player
-        public ImagePlot(PictureBoxHex hex, PictureBoxPlayer player, PictureBoxNumber Number)
+        public ImagePlot(int i, int j, HexBoard board)
         {
-            this.HexPic = hex;
-            this.PlayerPic = player;
-            this.NumPic = Number;
+            this.HexPic = new PictureBoxHex(i, j, board);
+            this.PlayerPic = new PictureBoxPlayer(i, j, board);
+            this.NumPic = new PictureBoxNumber(i, j, board);
         }
     }
 }

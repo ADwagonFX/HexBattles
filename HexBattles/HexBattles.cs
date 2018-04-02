@@ -32,19 +32,18 @@ namespace HexBattles
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    Dice1Array = new PictureBoxDice[10];
-                    Dice2Array = new PictureBoxDice[10];
-                    PicPlot[i, j] = new ImagePlot(new PictureBoxHex(i, j, this.Hex_board), new PictureBoxPlayer(i, j, this.Hex_board), new PictureBoxNumber(i,j, this.Hex_board));
-                    this.Controls.Add(PicPlot[i, j].HexPic);
-                    this.Controls.Add(PicPlot[i, j].PlayerPic);
-                    this.Controls.Add(PicPlot[i, j].NumPic);
-                    PicPlot[i, j].PlayerPic.Parent = PicPlot[i, j].HexPic;
-                    PicPlot[i, j].PlayerPic.Location = new Point(0, 0);
-                    PicPlot[i, j].NumPic.Parent = PicPlot[i, j].PlayerPic;
-                    PicPlot[i, j].NumPic.Location = new Point(40, 40);
-                    PicPlot[i, j].PlayerPic.Click += new System.EventHandler(this.Player_Picture_Click);
+                    var plot = new ImagePlot(i, j, this.Hex_board);
+                    PicPlot[i, j] = plot;
+                    this.Controls.Add(plot.HexPic);
+                    plot.HexPic.Controls.Add(plot.PlayerPic);
+                    plot.PlayerPic.Controls.Add(plot.NumPic);
+                    plot.NumPic.Location = new Point(40, 40);
+                    plot.PlayerPic.Click += new System.EventHandler(this.Player_Picture_Click);
                 }
             }
+
+            Dice1Array = new PictureBoxDice[10];
+            Dice2Array = new PictureBoxDice[10];
             for (int o = 0; o < 10; o++)
             {
                 Dice1Array[o] = new PictureBoxDice(0, 0, 0);
@@ -58,15 +57,15 @@ namespace HexBattles
             PictureBoxPlayer Soldier_Pic = (PictureBoxPlayer)sender;
             int Row = Soldier_Pic.Row, Column = Soldier_Pic.Column;
 
-            if(PictureBoxPlayer.PlayerSave != null && this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count > 1 && this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player != this.Hex_board.GetHexBoard()[Row, Column].Player)
+            if (PictureBoxPlayer.PlayerSave != null && this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count > 1 && this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player != this.Hex_board.GetHexBoard()[Row, Column].Player)
             {
-                if(this.Turn == -1)
+                if (this.Turn == -1)
                 {
                     if (this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player != this.Hex_board.GetHexBoard()[Row, Column].Player)
                     {
-                        if(this.Hex_board.LegalMove(PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column, Row, Column))
+                        if (this.Hex_board.LegalMove(PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column, Row, Column))
                         {
-                            if (this.Hex_board.GetHexBoard()[Row,Column].Player != 0 && this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player != this.Hex_board.GetHexBoard()[Row, Column].Player)
+                            if (this.Hex_board.GetHexBoard()[Row, Column].Player != 0 && this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player != this.Hex_board.GetHexBoard()[Row, Column].Player)
                             {
                                 int Player1_score, Player2_Score;
                                 for (int i = 0; i < 10; i++)
@@ -108,7 +107,8 @@ namespace HexBattles
                                         this.PicPlot[Row, Column].PlayerPic.RemoveImage();
                                         this.PicPlot[Row, Column].PlayerPic.AddPlayerImage(-2);
                                         this.PicPlot[Row, Column].NumPic.AddNumImage(this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count - 1);
-                                        PictureBoxPlayer.PlayerSave = Soldier_Pic;                                    }
+                                        PictureBoxPlayer.PlayerSave = Soldier_Pic;
+                                    }
                                     else
                                     {
                                         this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.RemoveImage();
@@ -131,11 +131,11 @@ namespace HexBattles
                         }
                     }
                 }
-                if(this.Turn == -2)
+                if (this.Turn == -2)
                 {
                     if (this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player != this.Hex_board.GetHexBoard()[Row, Column].Player)
                     {
-                        if(this.Hex_board.LegalMove(PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column, Row, Column))
+                        if (this.Hex_board.LegalMove(PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column, Row, Column))
                         {
                             if (this.Hex_board.GetHexBoard()[Row, Column].Player != 0 && this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player != this.Hex_board.GetHexBoard()[Row, Column].Player)
                             {
@@ -147,7 +147,7 @@ namespace HexBattles
                                 }
                                 if (this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player == -2)
                                 {
-                                    Player2_Score= this.War2(this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count);
+                                    Player2_Score = this.War2(this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count);
                                     Player1_score = this.War1(this.Hex_board.GetHexBoard()[Row, Column].Player_Count);
                                     if (Player2_Score > Player1_score)
                                     {
@@ -167,7 +167,8 @@ namespace HexBattles
                                     {
                                         this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.RemoveImage();
                                         this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count = 1;
-                                        this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.AddNumImage(-2);                                    }
+                                        this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.AddNumImage(-2);
+                                    }
                                 }
                                 else
                                 {
@@ -191,14 +192,14 @@ namespace HexBattles
                             }
                             else
                             {
-                            this.Hex_board.GetHexBoard()[Row, Column].Player = -2;
-                            this.Hex_board.GetHexBoard()[Row, Column].Player_Count = this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count - 1;
-                            this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count = 1;
-                            this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.RemoveImage();
-                            this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.AddNumImage(1);
-                            this.PicPlot[Row, Column].NumPic.AddNumImage(this.Hex_board.GetHexBoard()[Row, Column].Player_Count);
-                            this.PicPlot[Row, Column].PlayerPic.AddPlayerImage(-2);
-                            PictureBoxPlayer.PlayerSave = Soldier_Pic;
+                                this.Hex_board.GetHexBoard()[Row, Column].Player = -2;
+                                this.Hex_board.GetHexBoard()[Row, Column].Player_Count = this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count - 1;
+                                this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count = 1;
+                                this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.RemoveImage();
+                                this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.AddNumImage(1);
+                                this.PicPlot[Row, Column].NumPic.AddNumImage(this.Hex_board.GetHexBoard()[Row, Column].Player_Count);
+                                this.PicPlot[Row, Column].PlayerPic.AddPlayerImage(-2);
+                                PictureBoxPlayer.PlayerSave = Soldier_Pic;
                             }
                         }
                     }
@@ -209,7 +210,7 @@ namespace HexBattles
                 PictureBoxPlayer.PlayerSave = Soldier_Pic;
                 if (this.Turn == -1 && this.Hex_board.GetHexBoard()[Row, Column].Player != -1)
                     PictureBoxPlayer.PlayerSave = null;
-                if(this.Turn == -2 && this.Hex_board.GetHexBoard()[Row, Column].Player != -2)
+                if (this.Turn == -2 && this.Hex_board.GetHexBoard()[Row, Column].Player != -2)
                     PictureBoxPlayer.PlayerSave = null;
             }
         }
@@ -223,7 +224,7 @@ namespace HexBattles
         {
             Random rnd = new Random();
             int value = rnd.Next(1, 7), Sum = 0, i = 0;
-            for (int j = 0; j < Player1_Soldiers ; j++)
+            for (int j = 0; j < Player1_Soldiers; j++)
             {
                 this.Dice1Array[i].AddDiceImage(value);
                 this.Controls.Add(this.Dice1Array[i]);
@@ -255,6 +256,23 @@ namespace HexBattles
             DrawBoard();
         }
 
+        public void button2_Click(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                for (int j = 0; j < 9; j++)
+                {
+                    if (Hex_board.GetHexBoard()[i, j].Player == -2)
+                    {
+                        Location loc = new Location(i, j);
+                        Stack<Location> path = new AlphaBeta().GetBestPath(this.Hex_board, loc);
+                        DoAIMove(path, this.Hex_board);
+                    }
+                }
+            }
+
+        }
+
         // Functions done by clicking button1
         private void button1_Click(object sender, EventArgs e)
         {
@@ -270,7 +288,7 @@ namespace HexBattles
                         {
                             if (this.Hex_board.GetHexBoard()[i, j].Hex == 2)
                             {
-                                if(this.Hex_board.GetHexBoard()[i, j].Player_Count + 2 > 9)
+                                if (this.Hex_board.GetHexBoard()[i, j].Player_Count + 2 > 9)
                                 {
                                     this.Hex_board.GetHexBoard()[i, j].Player_Count = 9;
                                     this.PicPlot[i, j].NumPic.RemoveImage();
@@ -305,6 +323,21 @@ namespace HexBattles
                 this.Turn++;
             }
             PictureBoxPlayer.PlayerSave = null;
+        }
+
+        private void DoAIMove(Stack<Location> moves, HexBoard board)
+        {
+
+            if (moves.Count < 2)
+            {
+                return;
+            }
+            Location from = moves.Pop();
+            Location to = moves.Peek();
+            board.DoMove(from, to);
+            this.PicPlot[from.x, from.y].NumPic.AddNumImage(6);
+            this.PicPlot[to.x, to.y].PlayerPic.AddPlayerImage(-2);
+            this.PicPlot[to.x, to.y].NumPic.AddNumImage(Hex_board.GetHexBoard()[from.x, from.y].Player_Count - 1);
         }
     }
 }

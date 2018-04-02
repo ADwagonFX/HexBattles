@@ -65,6 +65,14 @@ namespace HexBattles
             Hex_Board[4, 8].Player_Count = 5;
         }
 
+        public Plot this[Location location]
+        {
+            get
+            {
+                return Hex_Board[location.x, location.y];
+            }
+        }
+
         // Random Map Generator
         public int Percentage(int rnd)
         {
@@ -87,7 +95,7 @@ namespace HexBattles
         // Checks if the move is legal
         public bool LegalMove(int locationI, int locationJ, int destI, int destJ)
         {
-            if (this.Hex_Board [ destI, destJ].Hex != 4)
+            if (this.Hex_Board[destI, destJ].Hex != 4)
             {
                 if (Math.Abs(locationI - destI) == 1)
                     if (destJ == locationJ || Math.Abs(destJ - locationJ) == 1)
@@ -116,6 +124,13 @@ namespace HexBattles
                     return false;
             }
             return true;
+        }
+
+        public void DoMove(Location from, Location to)
+        {
+            this.Hex_Board[to.x, to.y].Player = this.Hex_Board[from.x, from.y].Player;
+            this.Hex_Board[to.x, to.y].Player_Count = this.Hex_Board[from.x, from.y].Player_Count - 1;
+            this.Hex_Board[from.x, from.y].Player_Count = 1;
         }
     }
 }

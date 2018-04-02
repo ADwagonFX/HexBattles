@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 namespace HexBattles
 {
     // class is used to move the player and save the indexes
-    class Move
+    class Location
     {
         public int x;
         public int y;
 
-        public Move(int i, int j)
+        public Location(int i, int j)
         {
             this.x = j;
             this.y = i;
