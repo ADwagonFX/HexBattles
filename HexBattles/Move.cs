@@ -14,8 +14,8 @@ namespace HexBattles
 
         public Location(int i, int j)
         {
-            this.x = j;
-            this.y = i;
+            this.x = i;
+            this.y = j;
         }
 
     }

@@ -63,6 +63,9 @@ namespace HexBattles
             Hex_Board[4, 0].Player_Count = 5;
             Hex_Board[4, 8].Player = Player_2;
             Hex_Board[4, 8].Player_Count = 5;
+            Hex_Board[4, 8].Hex = 1;
+            Hex_Board[4, 0].Hex = 1;
+
         }
 
         public Plot this[Location location]
@@ -95,14 +98,22 @@ namespace HexBattles
         // Checks if the move is legal
         public bool LegalMove(int locationI, int locationJ, int destI, int destJ)
         {
-            if (this.Hex_Board[destI, destJ].Hex != 4)
+            var dest = this.Hex_Board[destI, destJ];
+            var location = this.Hex_Board[locationI, locationJ];
+            if (dest.Hex != 4 && dest.Hex != 0 && dest.Player != location.Player)
             {
-                if (Math.Abs(locationI - destI) == 1)
-                    if (destJ == locationJ || Math.Abs(destJ - locationJ) == 1)
-                        return true;
                 if (Math.Abs(locationI - destI) == 2 && Math.Abs(locationJ - destJ) == 1)
                     return true;
+
+                if(Math.Abs(locationI - destI) == 1)
+                {
+                    if (locationJ == destJ)
+                        return true;
+                    if ((locationI > destI && locationJ - destJ == 1) || (locationI < destI && locationJ - destJ == -1))
+                        return true;
+                }
             }
+
             PictureBoxPlayer.PlayerSave = null;
             return false;
         }
