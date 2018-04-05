@@ -102,8 +102,13 @@ namespace HexBattles
             var location = this.Hex_Board[locationI, locationJ];
             if (dest.Hex != 4 && dest.Hex != 0 && dest.Player != location.Player)
             {
-                if (Math.Abs(locationI - destI) == 2 && Math.Abs(locationJ - destJ) == 1)
-                    return true;
+                if (Math.Abs(locationI - destI) == 2)
+                {
+                    if (locationI > destI && locationJ - destJ == 1)
+                        return true;
+                    if (locationI < destI && destJ - locationJ == 1)
+                        return true;
+                }
 
                 if(Math.Abs(locationI - destI) == 1)
                 {

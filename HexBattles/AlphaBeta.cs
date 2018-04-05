@@ -12,7 +12,8 @@ namespace HexBattles
             HexBoard board,
             Location startLocation)
         {
-            var bestPath = GetBestPath(new AlphaBetaBoard(board), startLocation, 0);
+            AlphaBetaBoard Clone = new AlphaBetaBoard(board);
+            var bestPath = GetBestPath(Clone, startLocation, 0);
             return bestPath.Path;
         }
 
@@ -25,31 +26,44 @@ namespace HexBattles
             {
                 var path = new Stack<Location>();
                 path.Push(startLocation);
-                return new PossiblePath(plot.Player_Count, path);
+                return new PossiblePath(plot.Hex, path);
             }
 
-            PossiblePath bestPath = null;
+           // PossiblePath bestPath = null;
             var possibleMoves = PossibleMoves(startLocation.x, startLocation.y, board);
-            foreach (var location in possibleMoves)
+            if(possibleMoves.Count() != 0)
             {
-                AlphaBetaBoard cloneBoard = new AlphaBetaBoard(board);
-                //cloneBoard.CopyBoardData();
-                cloneBoard.GetHexBoard()[location.x, location.y].Player = -2;
-                cloneBoard.GetHexBoard()[location.x, location.y].Player_Count = cloneBoard.GetHexBoard()[startLocation.x, startLocation.y].Player_Count - 1;
-                cloneBoard.GetHexBoard()[location.x, location.y].Player_Count = 1;
+                PossiblePath bestPath = null;
+                foreach (var location in possibleMoves)
+                {
+                    AlphaBetaBoard cloneBoard = new AlphaBetaBoard(board);
+                    if(cloneBoard.GetHexBoard()[location.x, location.y].Player == -1)
+                    {
+                        // Write an "Is_It_Worth_It" function that calculats the propability of winning against the player.
+                        // If propability of AI winning higher than do the move there.
+                        // If not than exit the if statement.
+                    }
 
-                PossiblePath tempPath = GetBestPath(cloneBoard, location, depth + 1);
-                bestPath = BestPossiblePath(tempPath, bestPath);
+                    cloneBoard.GetHexBoard()[location.x, location.y].Player = -2;
+                    cloneBoard.GetHexBoard()[location.x, location.y].Player_Count = cloneBoard.GetHexBoard()[startLocation.x, startLocation.y].Player_Count - 1;
+
+                    PossiblePath tempPath = GetBestPath(cloneBoard, location, depth + 1);
+                    tempPath.Value = board.GetHexBoard()[location.x, location.y].Hex;
+                    bestPath = BestPossiblePath(tempPath, bestPath);
+                }
+                 
+                bestPath.Path.Push(startLocation);
+                bestPath.Value += plot.Hex;
+
+                return bestPath;
             }
-            bestPath.Path.Push(startLocation);
-            bestPath.Value += plot.Player_Count;
-
-            return bestPath;
+            else
+            {
+                var path = new Stack<Location>();
+                path.Push(startLocation);
+                return new PossiblePath(plot.Hex, path);
+            }
         }
-
-
-
-
 
 
 
@@ -139,20 +153,24 @@ namespace HexBattles
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    if (Board.GetHexBoard()[i, j].Hex != 4 && Board.GetHexBoard()[i, j].Player != -2)
+                    if(Board.LegalMove(x,y, i, j))
                     {
-                        if (Math.Abs(y - i) == 1)
-                            if (y == j || Math.Abs(j - y) == 1)
-                            {
-                                Location Point = new Location(i, j);
-                                Peripherals.Add(Point);
-                            }
-                        if (Math.Abs(y - i) == 2 && Math.Abs(x - j) == 1)
-                        {
-                            Location Point = new Location(i, j);
-                            Peripherals.Add(Point);
-                        }
+                        Peripherals.Add(new Location(i, j));
                     }
+                    //if (Board.GetHexBoard()[i, j].Hex != 4 && Board.GetHexBoard()[i, j].Player != -2 && Board.GetHexBoard()[i,j].Hex != 0)
+                    //{
+                    //    if (Math.Abs(y - i) == 1)
+                    //        if (y == j || Math.Abs(j - y) == 1)
+                    //        {
+                    //            Location Point = new Location(i, j);
+                    //            Peripherals.Add(Point);
+                    //        }
+                    //    if (Math.Abs(x - i) == 2 && Math.Abs(y - j) == 1)
+                    //    {
+                    //        Location Point = new Location(i, j);
+                    //        Peripherals.Add(Point);
+                    //    }
+                    //}
                 }
             }
             return Peripherals;

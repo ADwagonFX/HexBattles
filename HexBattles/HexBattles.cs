@@ -167,7 +167,7 @@ namespace HexBattles
                                     {
                                         this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.RemoveImage();
                                         this.Hex_board.GetHexBoard()[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].Player_Count = 1;
-                                        this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.AddNumImage(-2);
+                                        this.PicPlot[PictureBoxPlayer.PlayerSave.Row, PictureBoxPlayer.PlayerSave.Column].NumPic.AddNumImage(1);
                                     }
                                 }
                                 else
@@ -327,17 +327,18 @@ namespace HexBattles
 
         private void DoAIMove(Stack<Location> moves, HexBoard board)
         {
-
-            if (moves.Count < 2)
+            while(moves.Count >= 2)
             {
-                return;
+                Location from = moves.Pop();
+                Location to = moves.Peek();
+                board.DoMove(from, to);
+
+                this.PicPlot[from.x, from.y].NumPic.AddNumImage(1);
+                this.PicPlot[to.x, to.y].PlayerPic.AddPlayerImage(-2);
+                this.PicPlot[to.x, to.y].NumPic.AddNumImage(this.Hex_board[to].Player_Count);
             }
-            Location from = moves.Pop();
-            Location to = moves.Peek();
-            board.DoMove(from, to);
-            this.PicPlot[from.x, from.y].NumPic.AddNumImage(6);
-            this.PicPlot[to.x, to.y].PlayerPic.AddPlayerImage(-2);
-            this.PicPlot[to.x, to.y].NumPic.AddNumImage(Hex_board.GetHexBoard()[from.x, from.y].Player_Count - 1);
+            return;
         }
+
     }
 }
