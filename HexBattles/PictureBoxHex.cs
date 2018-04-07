@@ -21,8 +21,8 @@ namespace HexBattles
         {
             this.Row = Hex_I;
             this.Column = Hex_J;
-            int y = 10 + (35 * this.Row), x = (750 - this.Row * 35) + (70 * this.Column);
-            x = x = (x - Hex_I * 35) + (55 * Hex_J) - d[Hex_J];
+            int y = 10 + (35 * this.Row), x = (500 - this.Row * 35) + (70 * this.Column);
+            x = (x - Hex_I * 35) + (55 * Hex_J) - d[Hex_J];
 
             this.BringImage(board.GetHexBoard()[Hex_I, Hex_J].Hex);
             this.Location = new System.Drawing.Point(x, y);

@@ -228,7 +228,7 @@ namespace HexBattles
             {
                 this.Dice1Array[i].AddDiceImage(value);
                 this.Controls.Add(this.Dice1Array[i]);
-                this.Dice1Array[i].Location = new Point(150 + 70 * i, 750);
+                this.Dice1Array[i].Location = new Point(125 + 70 * i, 550);
                 i++;
                 Sum += value;
                 value = rnd.Next(1, 7);
@@ -243,7 +243,7 @@ namespace HexBattles
             {
                 this.Dice2Array[i].AddDiceImage(value);
                 this.Controls.Add(this.Dice2Array[i]);
-                this.Dice2Array[i].Location = new Point(1100 + 70 * i, 750);
+                this.Dice2Array[i].Location = new Point(650 + 70 * i, 550);
                 i++;
                 Sum += value;
                 value = rnd.Next(1, 7);
@@ -262,7 +262,7 @@ namespace HexBattles
             {
                 for (int j = 0; j < 9; j++)
                 {
-                    if (Hex_board.GetHexBoard()[i, j].Player == -2)
+                    if (Hex_board.GetHexBoard()[i, j].Player == -2 && Hex_board.GetHexBoard()[i,j].Player_Count > 1)
                     {
                         Location loc = new Location(i, j);
                         Stack<Location> path = new AlphaBeta().GetBestPath(this.Hex_board, loc);
